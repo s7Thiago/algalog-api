@@ -1,6 +1,7 @@
 package com.thiagosilva.algalog.domain.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -19,4 +20,5 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>{
 //	espondência não exata (devido ao sufixo Containing, que vai usar o Like do SQL
 //	para realizar a consulta)
 	List<Cliente> findByNomeContaining(String nome);
+	
 }
