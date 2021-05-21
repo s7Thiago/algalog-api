@@ -21,4 +21,8 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>{
 //	para realizar a consulta)
 	List<Cliente> findByNomeContaining(String nome);
 	
+//	Criado especialmente para a regra de negócio no método de salvar do service que 
+//	verifica se um email já existe antes de salvar um registro novo no banco de dados
+	Optional<Cliente> findByEmail(String email);
+	
 }
