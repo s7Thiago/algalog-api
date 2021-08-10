@@ -39,7 +39,7 @@ public class Entrega {
     @Embedded // Usada para abstrair os dados do destinatário para a classe Entrega,
               // abstraindo os dados para a mesma
     private Destinatario destinatario; // Como destinatário não é mapeado como uma tabela a parte no banco de dados,
-                                       // todas as informações do destinatário serão armazenadas em um campo da tabela
+                                       // todas as informações do destinatário serão transferidas para a tabela
                                        // entrega. Por isso não é necessário mapear o relacionamento entre as
                                        // entidades. Por questões de aproveitamento das vantagens da orientação a
                                        // objetos, os dados do destinatário foram abstraídos para a classe Entrega.
