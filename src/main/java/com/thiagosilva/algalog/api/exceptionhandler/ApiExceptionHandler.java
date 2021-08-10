@@ -28,6 +28,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+	// Interface usada para ajudar a resolver mensagens de erro
 	private MessageSource messageSource;
 
 	@Override
@@ -38,6 +39,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 		for (ObjectError error : ex.getBindingResult().getAllErrors()) {
 			String nome = ((FieldError) error).getField();
+
+			// faz os templates de mensagens de erro em messages.properties serem utilizados
+			// na emissão de erros no json ao invés dos padrões do spring
 			String mensagem = messageSource.getMessage(error, LocaleContextHolder.getLocale());
 
 			campos.add(new Problema.Campo(nome, mensagem));
@@ -52,16 +56,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return handleExceptionInternal(ex, problema, headers, status, request);
 	}
 
-//	 Tratando uma NegocioException
+	// Tratando uma NegocioException
 	@ExceptionHandler(NegocioException.class)
-	  public ResponseEntity<Object> handleNegocio(NegocioException ex, WebRequest request){
+	public ResponseEntity<Object> handleNegocio(NegocioException ex, WebRequest request) {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
-		
-		 Problema problema = new Problema();
-			problema.setStatus(status.value());
-			problema.setDataHora(LocalDateTime.now());
-			problema.setTitulo(ex.getMessage());
-		 
-		  return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
-	  }
+
+		Problema problema = new Problema();
+		problema.setStatus(status.value());
+		problema.setDataHora(LocalDateTime.now());
+		problema.setTitulo(ex.getMessage());
+
+		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+	}
 }
