@@ -12,6 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import lombok.Setter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -51,7 +54,18 @@ public class Entrega {
     @Enumerated(EnumType.STRING) // Define que a coluna do status na tabela vai armazenar a string que representa
                                  // a constante da enumeração (ORDINAL armazenaria o índice, e nesse caso não
                                  // seria muito interessante)
+    @JsonProperty(access = Access.READ_ONLY) // Define que o atributo não pode sofrer alteração externa, evitando assim
+                                             // que o consumidor da api modifique o status de uma entrega durante a
+                                             // criação da solicitação de entrega por exemplo
     private StatusEntrega status;
+
+    @JsonProperty(access = Access.READ_ONLY) // Define que o atributo não pode sofrer alteração externa, evitando assim
+                                             // que o consumidor da api modifique a data do pedido de uma entrega
+                                             // durante a criação da solicitação de entrega por exemplo
     private LocalDateTime dataPedido;
+
+    @JsonProperty(access = Access.READ_ONLY) // Define que o atributo não pode sofrer alteração externa, evitando assim
+                                             // que o consumidor da api modifique a data de finalização de uma entrega
+                                             // durante a criação da solicitação de entrega por exemplo
     private LocalDateTime dataFinalizacao;
 }
