@@ -22,7 +22,7 @@ import lombok.AllArgsConstructor;
 @Service
 public class SolicitacaoEntregaService {
 
-    private ClienteRepository clienteRepository;
+    private CatalogoClienteService catalogoClienteService;
     private EntregaRepository entregaRepository;
 
     @Transactional
@@ -32,9 +32,7 @@ public class SolicitacaoEntregaService {
 
         // Verificando se existe o cliente com o id passado nos dados da entrega para
         // retornar a mensagem adequada caso o mesmo não exista
-        Cliente cliente = clienteRepository.findById(entrega.getCliente().getId())
-                .orElseThrow(() -> new NegocioException(
-                        "Não foi encontrado um cliente com o código " + entrega.getCliente().getId()));
+        Cliente cliente = catalogoClienteService.buscar(entrega.getCliente().getId());
 
         entrega.setCliente(cliente); // Resolve o problema de as informações do cliente estarem todas null no json de
                                      // retorno deste método

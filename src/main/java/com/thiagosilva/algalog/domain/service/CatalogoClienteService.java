@@ -21,8 +21,15 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CatalogoClienteService {
 
-//	Injetendo a dependência para o ClienteRepository
+	// Injetando a dependência para o ClienteRepository
 	private ClienteRepository clienteRepository;
+
+	// Retorna os dados do cliente com o id passado e retorna uma mensagem de erro
+	// adequada caso não exista o cliente com o id passado
+	public Cliente buscar(Long clienteId) {
+		return clienteRepository.findById(clienteId)
+				.orElseThrow(() -> new NegocioException("Não foi encontrado um cliente com o código " + clienteId));
+	}
 
 	/*
 	 * Declara que este método deve ser executado dentro de uma transação, ou seja,
@@ -32,33 +39,35 @@ public class CatalogoClienteService {
 	 */
 	@Transactional
 	public Cliente salvar(Cliente cliente) {
-		
-//		Garantindo que não será cadastrado o mesmo email mais de uma vez no banco de dados
-//		como o método chamado retorna um Optional, foi necessário fazer um tratamento antes.
-//		O Optional foi usado como retorno porque pode, ou não existir algum resultado para
-//		esta consulta.
-		boolean emailEmUso = clienteRepository.findByEmail(cliente.getEmail())
-				.stream()
+
+		// Garantindo que não será cadastrado o mesmo email mais de uma vez no banco de
+		// dados
+		// como o método chamado retorna um Optional, foi necessário fazer um tratamento
+		// antes.
+		// O Optional foi usado como retorno porque pode, ou não existir algum resultado
+		// para
+		// esta consulta.
+		boolean emailEmUso = clienteRepository.findByEmail(cliente.getEmail()).stream()
 				/*
 				 * Se a consulta retornar um cliente, ele estará aqui, nesse caso, se o cliente
-				 * encontrado no repositório for diferente do cliente que estamos tentando salvar
-				 * vai ocorrer um match (ou seja, true), dessa forma podemos detectar quando o
-				 * cliente já existir no banco e for o mesmo da tentativa de salvamento, podendo
-				 * então optar por uma atualização nesse caso, ou de um lançamento de exceção, caso
-				 * o match retorne falso, ou seja, o email já estiver em uso por uma outra pessoa
-				 * já cadastrada no banco
+				 * encontrado no repositório for diferente do cliente que estamos tentando
+				 * salvar vai ocorrer um match (ou seja, true), dessa forma podemos detectar
+				 * quando o cliente já existir no banco e for o mesmo da tentativa de
+				 * salvamento, podendo então optar por uma atualização nesse caso, ou de um
+				 * lançamento de exceção, caso o match retorne falso, ou seja, o email já
+				 * estiver em uso por uma outra pessoa já cadastrada no banco
 				 */
-				.anyMatch(clienteExistente ->  !clienteExistente.equals(cliente));
-		
+				.anyMatch(clienteExistente -> !clienteExistente.equals(cliente));
+
 		System.out.println("Email em uso? " + (emailEmUso ? "Sim" : "Não"));
-		
-		if(emailEmUso) {
+
+		if (emailEmUso) {
 			throw new NegocioException("Já existe um cliente cadastrado com esse email");
 		}
-		
+
 		return clienteRepository.save(cliente);
 	}
-	
+
 	@Transactional
 	public void excluir(Long clienteId) {
 		clienteRepository.deleteById(clienteId);
