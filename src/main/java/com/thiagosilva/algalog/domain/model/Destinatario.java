@@ -12,7 +12,7 @@ import lombok.Setter;
             // entidade
 public class Destinatario {
 
-    @Column(name = "destinatario_name") // Personalizando o nome da coluna no banco de dados
+    @Column(name = "destinatario_nome") // Personalizando o nome da coluna no banco de dados
     private String nome;
 
     @Column(name = "destinatario_logradouro") // Personalizando o nome da coluna no banco de dados
