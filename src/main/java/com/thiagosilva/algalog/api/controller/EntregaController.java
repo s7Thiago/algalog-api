@@ -11,6 +11,7 @@ import com.thiagosilva.algalog.domain.service.SolicitacaoEntregaService;
 import com.thiagosilva.algalog.domain.service.model.DestinatarioModel;
 import com.thiagosilva.algalog.domain.service.model.EntregaModel;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,8 @@ public class EntregaController {
 
     private EntregaRepository entregaRepository;
     private SolicitacaoEntregaService solicitacaoEntregaService;
+    private ModelMapper modelMapper; // Foi necessário Criar uma classe de configuração (ModelMapConfig.java) para qu
+                                     // o Spring reconhecesse esta biblioteca como um componente.
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // Se este método rodar com sucesso, significa que um recurso novo foi criado,
@@ -46,19 +49,14 @@ public class EntregaController {
     @GetMapping("/{entregaId}")
     public ResponseEntity<EntregaModel> buscar(@PathVariable Long entregaId) {
         return entregaRepository.findById(entregaId).map(entrega -> {
-            EntregaModel entregaModel = new EntregaModel();
-            entregaModel.setId(entrega.getId());
-            entregaModel.setNomeCliente(entrega.getCliente().getNome());
-            entregaModel.setDestinatario(new DestinatarioModel());
-            entregaModel.getDestinatario().setNome(entrega.getDestinatario().getNome());
-            entregaModel.getDestinatario().setLogradouro(entrega.getDestinatario().getLogradouro());
-            entregaModel.getDestinatario().setNumero(entrega.getDestinatario().getNumero());
-            entregaModel.getDestinatario().setComplemento(entrega.getDestinatario().getComplemento());
-            entregaModel.getDestinatario().setBairro(entrega.getDestinatario().getBairro());
-            entregaModel.setTaxa(entrega.getTaxa());
-            entregaModel.setStatus(entrega.getStatus());
-            entregaModel.setDataPedido(entrega.getDataPedido());
-            entregaModel.setDataFinalizacao(entrega.getDataFinalizacao());
+
+            EntregaModel entregaModel = modelMapper.map(entrega, EntregaModel.class); // Usando ModelMapper para
+                                                                                      // atribuir todas as propriedades
+                                                                                      // de cada entrega em um
+                                                                                      // respectivo objeto equivalente
+                                                                                      // da camada de Representation
+                                                                                      // Model a partir de cada
+                                                                                      // instância da entidade Entrega.
             return ResponseEntity.ok(entregaModel);
         }) // Caso exista alguma coisa dentro deste
            // Optional, será retornado
