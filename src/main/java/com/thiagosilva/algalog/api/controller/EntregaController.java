@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.thiagosilva.algalog.api.assembler.EntregaAssembler;
 import com.thiagosilva.algalog.domain.model.Entrega;
 import com.thiagosilva.algalog.domain.repository.EntregaRepository;
 import com.thiagosilva.algalog.domain.service.SolicitacaoEntregaService;
@@ -31,8 +32,9 @@ public class EntregaController {
 
     private EntregaRepository entregaRepository;
     private SolicitacaoEntregaService solicitacaoEntregaService;
-    private ModelMapper modelMapper; // Foi necessário Criar uma classe de configuração (ModelMapConfig.java) para qu
-                                     // o Spring reconhecesse esta biblioteca como um componente.
+    private EntregaAssembler entregaAssembler; // Foi necessário Criar uma classe de configuração (ModelMapConfig.java)
+                                               // para qu
+    // o Spring reconhecesse esta biblioteca como um componente.
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // Se este método rodar com sucesso, significa que um recurso novo foi criado,
@@ -48,21 +50,16 @@ public class EntregaController {
 
     @GetMapping("/{entregaId}")
     public ResponseEntity<EntregaModel> buscar(@PathVariable Long entregaId) {
-        return entregaRepository.findById(entregaId).map(entrega -> {
-
-            EntregaModel entregaModel = modelMapper.map(entrega, EntregaModel.class); // Usando ModelMapper para
-                                                                                      // atribuir todas as propriedades
-                                                                                      // de cada entrega em um
-                                                                                      // respectivo objeto equivalente
-                                                                                      // da camada de Representation
-                                                                                      // Model a partir de cada
-                                                                                      // instância da entidade Entrega.
-            return ResponseEntity.ok(entregaModel);
-        }) // Caso exista alguma coisa dentro deste
-           // Optional, será retornado
-           // ResponseEntity.ok com a própria entrega
-           // que estiver dentro desse Optional como
-           // corpo da resposta convertida para um objeto EntregaModel
+        return entregaRepository.findById(entregaId)
+                .map(entrega -> ResponseEntity.ok(entregaAssembler.toModel(entrega))) // Caso exista alguma coisa dentro
+                                                                                      // deste // Optional, será
+                                                                                      // retornado ResponseEntity.ok com
+                                                                                      // a própria entrega que estiver
+                                                                                      // dentro desse Optional como
+                                                                                      // corpo da resposta convertida
+                                                                                      // para um objeto EntregaModel
+                                                                                      // através da classe
+                                                                                      // EntregaAssembler
                 .orElse(ResponseEntity.notFound().build()); // Cai no orElse se não existir nada dentro do Optional,
                                                             // retornado pelo findById, dessa forma, retornando 404 (Not
                                                             // Found)
