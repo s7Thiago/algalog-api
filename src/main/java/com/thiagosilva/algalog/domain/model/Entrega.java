@@ -11,9 +11,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.Valid;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
+import com.thiagosilva.algalog.domain.ValidationGroups;
 
 import lombok.Setter;
 import lombok.EqualsAndHashCode;
@@ -33,6 +39,15 @@ public class Entrega {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // O próprio banco de dados vai incrementar o Id
     private Long id;
 
+    @Valid
+    @ConvertGroup(from = Default.class, to = ValidationGroups.ClienteId.class) // Define que quando o atributo cliente
+                                                                               // for validado, o validation group que
+                                                                               // será outro, o primeiro parâmetro
+                                                                               // representa o validation group antigo,
+                                                                               // e o segundo representa o validation
+                                                                               // group que se deseja utilizar no lugar
+                                                                               // do antigo
+    @NotNull
     @ManyToOne // Mapeia o relacionamento entre as entidades Entrega e Cliente (Muitas entregas
                // para um cliente (uma mesma entrega não vai estar associada a mais de um
                // cliente)). A propriedade por padrão será criada como cliente_id (poderia ser
@@ -49,6 +64,7 @@ public class Entrega {
                                        // para uma classe separada, a fim de tornar o código na classe Entrega mais
                                        // limpo.
 
+    @NotNull
     private BigDecimal taxa; // Taxa de entrega
 
     @Enumerated(EnumType.STRING) // Define que a coluna do status na tabela vai armazenar a string que representa

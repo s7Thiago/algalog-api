@@ -2,11 +2,9 @@ package com.thiagosilva.algalog.domain.service;
 
 import java.time.LocalDateTime;
 
-import com.thiagosilva.algalog.domain.exception.NegocioException;
 import com.thiagosilva.algalog.domain.model.Cliente;
 import com.thiagosilva.algalog.domain.model.Entrega;
 import com.thiagosilva.algalog.domain.model.StatusEntrega;
-import com.thiagosilva.algalog.domain.repository.ClienteRepository;
 import com.thiagosilva.algalog.domain.repository.EntregaRepository;
 
 import org.springframework.stereotype.Service;

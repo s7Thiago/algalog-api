@@ -1,5 +1,7 @@
 package com.thiagosilva.algalog.api.controller;
 
+import javax.validation.Valid;
+
 import com.thiagosilva.algalog.domain.model.Entrega;
 import com.thiagosilva.algalog.domain.service.SolicitacaoEntregaService;
 
@@ -22,7 +24,7 @@ public class EntregaController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // Se este método rodar com sucesso, significa que um recurso novo foi criado,
                                         // por isso a escolha de retornar o status 201
-    public Entrega solicitar(@RequestBody Entrega entrega) {
+    public Entrega solicitar(@Valid @RequestBody Entrega entrega) {
         return solicitacaoEntregaService.solicitarEntrega(entrega);
     }
 }
