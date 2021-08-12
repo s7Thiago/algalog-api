@@ -1,5 +1,9 @@
 package com.thiagosilva.algalog.api.assembler;
 
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 import com.thiagosilva.algalog.domain.model.Entrega;
 import com.thiagosilva.algalog.domain.service.model.EntregaModel;
 
@@ -22,12 +26,16 @@ public class EntregaAssembler {
     private ModelMapper modelMapper;
 
     public EntregaModel toModel(Entrega entrega) {
-        return modelMapper.map(entrega, EntregaModel.class);// Usando ModelMapper para
-        // atribuir todas as propriedades
-        // de cada entrega em um
-        // respectivo objeto equivalente
-        // da camada de Representation
-        // Model a partir de cada
-        // instância da entidade Entrega.
+        return modelMapper.map(entrega, EntregaModel.class);// Usando ModelMapper para atribuir todas as propriedades de
+                                                            // cada entrega em um respectivo objeto equivalente da
+                                                            // camada de Representation Model a partir de cada instância
+                                                            // da entidade Entrega.
     }
+
+    public List<EntregaModel> toCollectionModel(List<Entrega> entregas) {
+        return entregas.stream().map(this::toModel) // Convertendo uma uma stream de Entrega para uma stream de
+                                                    // EntregaModel
+                .collect(Collectors.toList());
+    }
+
 }
