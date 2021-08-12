@@ -54,6 +54,8 @@ public class Entrega {
                // modificada com a annotation @JoinColumn(name = "id_cliente") por exemplo)
     private Cliente cliente;
 
+    @Valid
+    @NotNull
     @Embedded // Usada para abstrair os dados do destinatário para a classe Entrega,
               // abstraindo os dados para a mesma
     private Destinatario destinatario; // Como destinatário não é mapeado como uma tabela a parte no banco de dados,
