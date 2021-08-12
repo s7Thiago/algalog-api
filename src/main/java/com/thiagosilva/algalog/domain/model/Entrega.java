@@ -1,7 +1,7 @@
 package com.thiagosilva.algalog.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -80,10 +80,10 @@ public class Entrega {
     @JsonProperty(access = Access.READ_ONLY) // Define que o atributo não pode sofrer alteração externa, evitando assim
                                              // que o consumidor da api modifique a data do pedido de uma entrega
                                              // durante a criação da solicitação de entrega por exemplo
-    private LocalDateTime dataPedido;
+    private OffsetDateTime dataPedido;
 
     @JsonProperty(access = Access.READ_ONLY) // Define que o atributo não pode sofrer alteração externa, evitando assim
                                              // que o consumidor da api modifique a data de finalização de uma entrega
                                              // durante a criação da solicitação de entrega por exemplo
-    private LocalDateTime dataFinalizacao;
+    private OffsetDateTime dataFinalizacao;
 }
